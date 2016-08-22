@@ -11,6 +11,6 @@ Download **[details-element-polyfill.js](dist/details-element-polyfill.js)** (2.
 
 ---
 
-Licensed under the [MIT License](LICENSE.txt)
+Licensed under the [MIT License](LICENSE)
 
 © 2016 Javan Makhmali
