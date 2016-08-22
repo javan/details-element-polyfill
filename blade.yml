@@ -1,0 +1,13 @@
+load_paths:
+  - src
+  - test/src
+
+logical_paths:
+  - details-element-polyfill.js
+  - test.js
+
+build:
+  logical_paths:
+    - details-element-polyfill.js
+  path: dist
+  js_compressor: uglifier

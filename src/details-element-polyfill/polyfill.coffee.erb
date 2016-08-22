@@ -1,0 +1,121 @@
+# Feature tests
+
+support =
+  element: do ->
+    element = document.createElement("details")
+    return false unless "open" of element
+
+    element.innerHTML = "<summary>a</summary>b"
+    element.setAttribute("style", "position: absolute; left: -9999px")
+
+    parent = document.body ? document.documentElement
+    parent.appendChild(element)
+    closedHeight = element.offsetHeight
+    element.open = true
+    openedHeight = element.offsetHeight
+    parent.removeChild(element)
+
+    closedHeight isnt openedHeight
+
+  toggleEvent: do ->
+    element = document.createElement("details")
+    "ontoggle" of element
+
+return if support.element and support.toggleEvent
+
+# Polyfill installers
+
+polyfillStyles = ->
+  document.head.insertAdjacentHTML("afterbegin", """<style><%= depend_on_asset("./polyfill.css").to_s.gsub(/\s/, "").strip %></style>""")
+
+polyfillProperties = ->
+  {prototype} = document.createElement("details").constructor
+  {setAttribute, removeAttribute} = prototype
+  setOpen = Object.getOwnPropertyDescriptor(prototype, "open")?.set
+
+  Object.defineProperties prototype,
+    open:
+      set: (value) ->
+        if @tagName is "DETAILS"
+          if value
+            @setAttribute("open", "")
+          else
+            @removeAttribute("open")
+          value
+        else
+          setOpen?.call(this, value)
+
+    setAttribute:
+      value: (name, value) ->
+        triggerToggleIfToggled this, =>
+          setAttribute.call(this, name, value)
+
+    removeAttribute:
+      value: (name) ->
+        triggerToggleIfToggled this, =>
+          removeAttribute.call(this, name)
+
+polyfillToggle = ->
+  onTogglingClick (element) ->
+    if element.hasAttribute("open")
+      element.removeAttribute("open")
+    else
+      element.setAttribute("open", "")
+
+polyfillToggleEvent = ->
+  if MutationObserver?
+    observer = new MutationObserver (mutations) ->
+      for {target, attributeName} in mutations
+        if target.tagName is "DETAILS" and attributeName is "open"
+          triggerToggle(target)
+
+    observer.observe(document.documentElement, attributes: true, subtree: true)
+  else
+    onTogglingClick (element) ->
+      open = element.getAttribute("open")
+      setTimeout ->
+        unless element.getAttribute("open") is open
+          triggerToggle(element)
+      , 1
+
+# Event helpers
+
+clickEventIsSignificant = (event) ->
+  not (
+    event.defaultPrevented or
+    event.which > 1 or
+    event.altKey or
+    event.ctrlKey or
+    event.metaKey or
+    event.shiftKey or
+    event.target.isContentEditable
+  )
+
+onTogglingClick = (callback) ->
+  addEventListener "click", (event) ->
+    if clickEventIsSignificant(event)
+      {target: {tagName, parentElement}} = event
+      if tagName is "SUMMARY" and parentElement?.tagName is "DETAILS"
+        callback(parentElement)
+  , false
+
+triggerToggle = (element) ->
+  event = document.createEvent("Events")
+  event.initEvent("toggle", true, false)
+  element.dispatchEvent(event)
+
+triggerToggleIfToggled = (element, fn) ->
+  open = element.getAttribute("open")
+  result = fn()
+  triggerToggle(element) unless element.getAttribute("open") is open
+  result
+
+# Install polyfills
+
+unless support.element
+  polyfillStyles()
+  polyfillProperties()
+  polyfillToggle()
+
+if support.element and not support.toggleEvent
+  polyfillToggleEvent()
