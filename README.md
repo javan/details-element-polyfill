@@ -1,4 +1,4 @@
-# Polyfill for the [HTML `<details>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)
+# [HTML `<details>` Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details) Polyfill
 
 <details open><summary><strong>Implemented Features</strong></summary>
  * Toggling on click
