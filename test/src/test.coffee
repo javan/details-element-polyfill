@@ -1,5 +1,4 @@
 {module, test} = QUnit
-QUnit.config.testTimeout = 1000
 
 module "<details>",
   beforeEach: ->
@@ -92,7 +91,7 @@ getElement = (id) ->
   document.getElementById(id)
 
 defer = (callback) ->
-  setTimeout(callback, 20)
+  setTimeout(callback, 30)
 
 clickElement = (element, callback) ->
   try

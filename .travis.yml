@@ -1,0 +1,10 @@
+language: ruby
+cache: bundler
+branches:
+  only:
+    - master
+env:
+  global:
+    - SAUCE_USERNAME=details-polyfill
+    - SAUCE_ACCESS_KEY=e1ee8b87-18e1-4ab4-b547-d716a485498b
+script: bin/blade ci
