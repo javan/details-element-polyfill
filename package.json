@@ -1,0 +1,27 @@
+{
+  "name": "details-element-polyfill",
+  "version": "1.0.0",
+  "description": "HTML <details> element polyfill",
+  "main": "dist/details-element-polyfill.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "bin/blade runner"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javan/details-element-polyfill.git"
+  },
+  "keywords": [
+    "html",
+    "details",
+    "polyfill"
+  ],
+  "author": "Javan Makhmali",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/javan/details-element-polyfill/issues"
+  },
+  "homepage": "https://github.com/javan/details-element-polyfill#readme"
+}
