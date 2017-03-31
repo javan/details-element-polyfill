@@ -28,6 +28,20 @@ return if support.element and support.toggleEvent
 polyfillStyles = ->
   document.head.insertAdjacentHTML("afterbegin", """<style><%= depend_on_asset("./polyfill.css").to_s.gsub(/\s/, "").strip %></style>""")
 
+polyfillClosest = ->
+  if window.Element and !Element::closest
+    Element::closest = (s) ->
+      matches = (@document or @ownerDocument).querySelectorAll(s)
+      i = undefined
+      el = this
+      loop
+        i = matches.length
+        while --i >= 0 and matches.item(i) != el
+          continue
+        unless i < 0 and (el = el.parentElement)
+          break
+      el
+
 polyfillProperties = ->
   {prototype} = document.createElement("details").constructor
   {setAttribute, removeAttribute} = prototype
@@ -94,9 +108,9 @@ clickEventIsSignificant = (event) ->
 onTogglingClick = (callback) ->
   addEventListener "click", (event) ->
     if clickEventIsSignificant(event)
-      {target: {tagName, parentElement}} = event
-      if tagName is "SUMMARY" and parentElement?.tagName is "DETAILS"
-        callback(parentElement)
+      summary = event.target.closest("SUMMARY")
+      if summary
+        callback(summary.parentElement)
   , false
 
 triggerToggle = (element) ->
@@ -114,6 +128,7 @@ triggerToggleIfToggled = (element, fn) ->
 
 unless support.element
   polyfillStyles()
+  polyfillClosest()
   polyfillProperties()
   polyfillToggle()
 
