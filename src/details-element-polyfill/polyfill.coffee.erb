@@ -94,10 +94,22 @@ clickEventIsSignificant = (event) ->
 onTogglingClick = (callback) ->
   addEventListener "click", (event) ->
     if clickEventIsSignificant(event)
-      {target: {tagName, parentElement}} = event
-      if tagName is "SUMMARY" and parentElement?.tagName is "DETAILS"
-        callback(parentElement)
+      if element = findClosestElementWithTagName(event.target, "SUMMARY")
+        if element.parentElement?.tagName is "DETAILS"
+          callback(element.parentElement)
   , false
+
+findClosestElementWithTagName = do ->
+  if typeof Element::closest is "function"
+    (element, tagName) ->
+      element.closest(tagName)
+  else
+    (element, tagName) ->
+      while element
+        if element.tagName is tagName
+          return element
+        else
+          element = element.parentElement
 
 triggerToggle = (element) ->
   event = document.createEvent("Events")

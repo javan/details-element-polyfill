@@ -65,7 +65,7 @@ test "open attribute toggles content", (assert) ->
         assert.equal toggleEventCount, 2
         done()
 
-test "click toggles content", (assert) ->
+test "click <summary> toggles content", (assert) ->
   done = assert.async()
 
   element = getElement("details")
@@ -82,6 +82,31 @@ test "click toggles content", (assert) ->
       assert.equal toggleEventCount, 1
 
       clickElement summary, ->
+        assert.equal content.offsetHeight, 0
+        assert.notOk element.hasAttribute("open")
+        assert.ok toggleEventCount, 2
+        done()
+
+test "click <summary> child toggles content", (assert) ->
+  done = assert.async()
+
+  element = getElement("details")
+  summary = getElement("summary")
+  content = getElement("content")
+
+  summaryChild = document.createElement("span")
+  summary.appendChild(summaryChild)
+
+  toggleEventCount = 0
+  element.addEventListener "toggle", -> toggleEventCount++
+
+  defer ->
+    clickElement summaryChild, ->
+      assert.notEqual content.offsetHeight, 0
+      assert.ok element.hasAttribute("open")
+      assert.equal toggleEventCount, 1
+
+      clickElement summaryChild, ->
         assert.equal content.offsetHeight, 0
         assert.notOk element.hasAttribute("open")
         assert.ok toggleEventCount, 2
