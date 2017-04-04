@@ -6,7 +6,7 @@
  * Toggling with `element.open = true` and `element.open = false`
  * Toggling with `element.setAttribute("open", "")` and `element.removeAttribute("open")`
  * Dispatching the [`toggle` event](http://www.w3schools.com/jsref/event_ontoggle.asp)
- 
+
 </details>
 
 <details open><summary><strong>Download</strong></summary>
@@ -25,6 +25,6 @@
 
 Licensed under the [MIT License](LICENSE)
 
-© 2016 Javan Makhmali
+© 2017 Javan Makhmali
 
 </details>

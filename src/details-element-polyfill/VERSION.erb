@@ -1,0 +1,5 @@
+<%=
+pkg = Pathname.new("#{__dir__}/../../package.json").realpath
+depend_on(pkg)
+JSON.parse(pkg.read)["version"]
+%>
