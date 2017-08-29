@@ -66,6 +66,9 @@ polyfillToggle = ->
       summary.setAttribute("aria-expanded", true)
 
 polyfillFocusAndARIA = ->
+  summaries = document.querySelectorAll("summary")
+  for summary in summaries
+    addAttributesForSummary(summary)
   if MutationObserver?
     observer = new MutationObserver (mutations) ->
       for {addedNodes} in mutations
