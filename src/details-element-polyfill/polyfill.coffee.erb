@@ -83,8 +83,9 @@ polyfillFocusAndARIA = ->
         addAttributesForSummary event.target
 
 addAttributesForSummary = (summary) ->
+  details = findClosestElementWithTagName(summary, "DETAILS")
   summary.setAttribute "tabindex", "0"
-  summary.setAttribute "aria-expanded", "false"
+  summary.setAttribute "aria-expanded", details.open
   summary.setAttribute "role", "button"
 
 polyfillToggleEvent = ->
