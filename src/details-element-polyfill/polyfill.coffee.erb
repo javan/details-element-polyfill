@@ -106,22 +106,9 @@ polyfillToggleEvent = ->
       , 1
 
 # Event helpers
-
-clickEventIsSignificant = (event) ->
+eventIsSignificant = (event) ->
   not (
     event.defaultPrevented or
-    event.which > 1 or
-    event.altKey or
-    event.ctrlKey or
-    event.metaKey or
-    event.shiftKey or
-    event.target.isContentEditable
-  )
-
-keydownEventIsSignificant = (event) ->
-  not (
-    event.defaultPrevented or
-    (event.keyCode != 32 and event.keyCode != 13) or
     event.altKey or
     event.ctrlKey or
     event.metaKey or
@@ -131,14 +118,14 @@ keydownEventIsSignificant = (event) ->
 
 onTogglingTrigger = (callback) ->
   addEventListener("click", (event) ->
-    if clickEventIsSignificant(event)
+    if eventIsSignificant(event) and event.which <= 1
       if element = findClosestElementWithTagName(event.target, "SUMMARY")
         if element.parentElement?.tagName is "DETAILS"
           callback(element.parentElement)
   , false)
 
   addEventListener("keydown", (event) ->
-    if keydownEventIsSignificant(event)
+    if eventIsSignificant(event) and event.keyCode in [13, 32]
       if element = findClosestElementWithTagName(event.target, "SUMMARY")
         if element.parentElement?.tagName is "DETAILS"
           callback(element.parentElement)
