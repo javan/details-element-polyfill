@@ -75,7 +75,7 @@ polyfillFocusAndARIA = ->
         for target in addedNodes
           if target.tagName is "DETAILS"
             summary = target.querySelector("summary")
-            addAttributesForSummary(summary) if summary
+            addAttributesForSummary(summary, target) if summary
     observer.observe(document.documentElement, attributes: true, subtree: true, childList: true)
   else
     document.addEventListener("DOMNodeInserted", (event) ->
@@ -83,8 +83,8 @@ polyfillFocusAndARIA = ->
         addAttributesForSummary event.target
     )
 
-addAttributesForSummary = (summary) ->
-  details = findClosestElementWithTagName(summary, "DETAILS")
+addAttributesForSummary = (summary, details) ->
+  details = findClosestElementWithTagName(summary, "DETAILS") unless details
   summary.setAttribute("tabindex", "0")
   summary.setAttribute("aria-expanded", details.hasAttribute("open"))
   summary.setAttribute("role", "button")
