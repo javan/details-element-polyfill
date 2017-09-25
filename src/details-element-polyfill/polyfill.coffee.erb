@@ -85,7 +85,7 @@ polyfillFocusAndARIA = ->
 
 addAttributesForSummary = (summary, details) ->
   details = findClosestElementWithTagName(summary, "DETAILS") unless details
-  summary.setAttribute("tabindex", "0")
+  summary.setAttribute("tabindex", "0") unless summary.hasAttribute("tabindex")
   summary.setAttribute("aria-expanded", details.hasAttribute("open"))
   summary.setAttribute("role", "button")
 
