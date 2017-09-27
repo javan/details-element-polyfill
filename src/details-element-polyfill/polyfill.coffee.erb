@@ -66,28 +66,28 @@ polyfillToggle = ->
       summary.setAttribute("aria-expanded", true)
 
 polyfillFocusAndARIA = ->
-  summaries = document.querySelectorAll("summary")
-  for summary in summaries
+  for summary in document.querySelectorAll("summary")
     addAttributesForSummary(summary)
+
   if MutationObserver?
     observer = new MutationObserver (mutations) ->
       for {addedNodes} in mutations
         for target in addedNodes
           if target.tagName is "DETAILS"
-            summary = target.querySelector("summary")
-            addAttributesForSummary(summary, target) if summary
+            if summary = target.querySelector("summary")
+              addAttributesForSummary(summary, target)
+
     observer.observe(document.documentElement, subtree: true, childList: true)
   else
-    document.addEventListener("DOMNodeInserted", (event) ->
+    document.addEventListener "DOMNodeInserted", (event) ->
       if event.target.tagName is "SUMMARY"
         addAttributesForSummary event.target
-    )
 
 addAttributesForSummary = (summary, details) ->
-  details = findClosestElementWithTagName(summary, "DETAILS") unless details
-  summary.setAttribute("tabindex", "0") unless summary.hasAttribute("tabindex")
+  details ?= findClosestElementWithTagName(summary, "DETAILS")
   summary.setAttribute("aria-expanded", details.hasAttribute("open"))
-  summary.setAttribute("role", "button")
+  summary.setAttribute("tabindex", "0") unless summary.hasAttribute("tabindex")
+  summary.setAttribute("role", "button") unless summary.hasAttribute("role")
 
 polyfillToggleEvent = ->
   if MutationObserver?
@@ -106,6 +106,7 @@ polyfillToggleEvent = ->
       , 1
 
 # Event helpers
+
 eventIsSignificant = (event) ->
   not (
     event.defaultPrevented or
@@ -117,21 +118,21 @@ eventIsSignificant = (event) ->
   )
 
 onTogglingTrigger = (callback) ->
-  addEventListener("click", (event) ->
+  addEventListener "click", (event) ->
     if eventIsSignificant(event) and event.which <= 1
       if element = findClosestElementWithTagName(event.target, "SUMMARY")
         if element.parentElement?.tagName is "DETAILS"
           callback(element.parentElement)
-  , false)
+  , false
 
-  addEventListener("keydown", (event) ->
+  addEventListener "keydown", (event) ->
     if eventIsSignificant(event) and event.keyCode in [13, 32]
       if element = findClosestElementWithTagName(event.target, "SUMMARY")
         if element.parentElement?.tagName is "DETAILS"
           callback(element.parentElement)
           # Prevent pagedown from space key
           event.preventDefault()
-  , false)
+  , false
 
 findClosestElementWithTagName = do ->
   if typeof Element::closest is "function"
