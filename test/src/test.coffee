@@ -21,6 +21,14 @@ test "displays summary and hides content initially", (assert) ->
     assert.equal getElement("content").offsetHeight, 0
     done()
 
+test "summary is focusable", (assert) ->
+  done = assert.async()
+  summary = getElement("summary")
+  defer ->
+    summary.focus()
+    assert.equal document.activeElement, summary
+    done()
+
 test "open property toggles content", (assert) ->
   done = assert.async()
 

@@ -56,11 +56,38 @@ polyfillProperties = ->
           removeAttribute.call(this, name)
 
 polyfillToggle = ->
-  onTogglingClick (element) ->
+  onTogglingTrigger (element) ->
+    summary = element.querySelector("summary")
     if element.hasAttribute("open")
       element.removeAttribute("open")
+      summary.setAttribute("aria-expanded", false)
     else
       element.setAttribute("open", "")
+      summary.setAttribute("aria-expanded", true)
+
+polyfillFocusAndARIA = ->
+  summaries = document.querySelectorAll("summary")
+  for summary in summaries
+    addAttributesForSummary(summary)
+  if MutationObserver?
+    observer = new MutationObserver (mutations) ->
+      for {addedNodes} in mutations
+        for target in addedNodes
+          if target.tagName is "DETAILS"
+            summary = target.querySelector("summary")
+            addAttributesForSummary(summary, target) if summary
+    observer.observe(document.documentElement, subtree: true, childList: true)
+  else
+    document.addEventListener("DOMNodeInserted", (event) ->
+      if event.target.tagName is "SUMMARY"
+        addAttributesForSummary event.target
+    )
+
+addAttributesForSummary = (summary, details) ->
+  details = findClosestElementWithTagName(summary, "DETAILS") unless details
+  summary.setAttribute("tabindex", "0") unless summary.hasAttribute("tabindex")
+  summary.setAttribute("aria-expanded", details.hasAttribute("open"))
+  summary.setAttribute("role", "button")
 
 polyfillToggleEvent = ->
   if MutationObserver?
@@ -71,7 +98,7 @@ polyfillToggleEvent = ->
 
     observer.observe(document.documentElement, attributes: true, subtree: true)
   else
-    onTogglingClick (element) ->
+    onTogglingTrigger (element) ->
       open = element.getAttribute("open")
       setTimeout ->
         unless element.getAttribute("open") is open
@@ -79,11 +106,9 @@ polyfillToggleEvent = ->
       , 1
 
 # Event helpers
-
-clickEventIsSignificant = (event) ->
+eventIsSignificant = (event) ->
   not (
     event.defaultPrevented or
-    event.which > 1 or
     event.altKey or
     event.ctrlKey or
     event.metaKey or
@@ -91,13 +116,22 @@ clickEventIsSignificant = (event) ->
     event.target.isContentEditable
   )
 
-onTogglingClick = (callback) ->
-  addEventListener "click", (event) ->
-    if clickEventIsSignificant(event)
+onTogglingTrigger = (callback) ->
+  addEventListener("click", (event) ->
+    if eventIsSignificant(event) and event.which <= 1
       if element = findClosestElementWithTagName(event.target, "SUMMARY")
         if element.parentElement?.tagName is "DETAILS"
           callback(element.parentElement)
-  , false
+  , false)
+
+  addEventListener("keydown", (event) ->
+    if eventIsSignificant(event) and event.keyCode in [13, 32]
+      if element = findClosestElementWithTagName(event.target, "SUMMARY")
+        if element.parentElement?.tagName is "DETAILS"
+          callback(element.parentElement)
+          # Prevent pagedown from space key
+          event.preventDefault()
+  , false)
 
 findClosestElementWithTagName = do ->
   if typeof Element::closest is "function"
@@ -128,6 +162,7 @@ unless support.element
   polyfillStyles()
   polyfillProperties()
   polyfillToggle()
+  polyfillFocusAndARIA()
 
 if support.element and not support.toggleEvent
   polyfillToggleEvent()
