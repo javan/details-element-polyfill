@@ -76,7 +76,7 @@ polyfillFocusAndARIA = ->
           if target.tagName is "DETAILS"
             summary = target.querySelector("summary")
             addAttributesForSummary(summary, target) if summary
-    observer.observe(document.documentElement, attributes: true, subtree: true, childList: true)
+    observer.observe(document.documentElement, subtree: true, childList: true)
   else
     document.addEventListener("DOMNodeInserted", (event) ->
       if event.target.tagName is "SUMMARY"
