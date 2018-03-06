@@ -35,6 +35,8 @@ polyfillProperties = ->
 
   Object.defineProperties prototype,
     open:
+      get: ->
+        @hasAttribute("open")
       set: (value) ->
         if @tagName is "DETAILS"
           if value
