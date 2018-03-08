@@ -32,11 +32,15 @@ polyfillProperties = ->
   {prototype} = document.createElement("details").constructor
   {setAttribute, removeAttribute} = prototype
   setOpen = Object.getOwnPropertyDescriptor(prototype, "open")?.set
+  getOpen = Object.getOwnPropertyDescriptor(prototype, "open")?.get
 
   Object.defineProperties prototype,
     open:
       get: ->
-        @hasAttribute("open")
+        if @tagName is "DETAILS"
+          @hasAttribute("open")
+        else
+          getOpen?.call(this)
       set: (value) ->
         if @tagName is "DETAILS"
           if value
