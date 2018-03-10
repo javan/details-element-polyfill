@@ -1,11 +1,11 @@
 {
   "name": "details-element-polyfill",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "HTML <details> element polyfill",
   "main": "dist/details-element-polyfill.js",
-  "directories": {
-    "test": "test"
-  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "bin/blade runner"
   },
