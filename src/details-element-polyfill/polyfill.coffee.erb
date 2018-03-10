@@ -31,8 +31,7 @@ polyfillStyles = ->
 polyfillProperties = ->
   {prototype} = document.createElement("details").constructor
   {setAttribute, removeAttribute} = prototype
-  setOpen = Object.getOwnPropertyDescriptor(prototype, "open")?.set
-  getOpen = Object.getOwnPropertyDescriptor(prototype, "open")?.get
+  open = Object.getOwnPropertyDescriptor(prototype, "open")
 
   Object.defineProperties prototype,
     open:
@@ -40,7 +39,7 @@ polyfillProperties = ->
         if @tagName is "DETAILS"
           @hasAttribute("open")
         else
-          getOpen?.call(this)
+          open?.get?.call(this)
       set: (value) ->
         if @tagName is "DETAILS"
           if value
@@ -49,7 +48,7 @@ polyfillProperties = ->
             @removeAttribute("open")
           value
         else
-          setOpen?.call(this, value)
+          open?.set?.call(this, value)
 
     setAttribute:
       value: (name, value) ->
