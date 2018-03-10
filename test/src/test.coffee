@@ -42,12 +42,14 @@ test "open property toggles content", (assert) ->
     defer ->
       assert.notEqual content.offsetHeight, 0
       assert.ok element.hasAttribute("open")
+      assert.ok element.open
       assert.equal toggleEventCount, 1
 
       element.open = false
       defer ->
         assert.equal content.offsetHeight, 0
         assert.notOk element.hasAttribute("open")
+        assert.notOk element.open
         defer ->
           assert.equal toggleEventCount, 2
           done()
