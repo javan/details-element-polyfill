@@ -149,7 +149,7 @@ findClosestElementWithTagName = do ->
         if element.tagName is tagName
           return element
         else
-          element = element.parentElement
+          element = element.parentNode
 
 triggerToggle = (element) ->
   event = document.createEvent("Events")
