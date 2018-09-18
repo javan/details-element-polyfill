@@ -115,7 +115,6 @@ polyfillToggleEvent = ->
 eventIsSignificant = (event) ->
   not (
     event.defaultPrevented or
-    event.altKey or
     event.ctrlKey or
     event.metaKey or
     event.shiftKey or
