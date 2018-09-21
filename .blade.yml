@@ -16,10 +16,8 @@ plugins:
   sauce_labs:
     browsers:
       Google Chrome:
-        os: Mac, Windows, Linux
         version: -3
       Firefox:
-        os: Mac, Windows, Linux
         version: -3
       Safari:
         platform: Mac
