@@ -3,15 +3,17 @@
 module "<details>",
   beforeEach: ->
     fixtureHTML = """
-      <details id="details">
-        <summary id="summary">Summary</summary>
-        <div id="content">Content</div>
-      </details>
+      <div id="container">
+        <details id="details">
+          <summary id="summary">Summary</summary>
+          <div id="content">Content</div>
+        </details>
+      </div>
     """
     document.body.insertAdjacentHTML("beforeend", fixtureHTML)
 
   afterEach: ->
-    document.body.removeChild(document.getElementById("details"))
+    document.body.removeChild(document.getElementById("container"))
 
 
 test "displays summary and hides content initially", (assert) ->
