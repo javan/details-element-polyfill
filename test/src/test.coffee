@@ -27,7 +27,7 @@ test "summary is focusable", (assert) ->
   done = assert.async()
   summary = getElement("summary")
   defer ->
-    if navigator.userAgent.match(/Trident|Edge/)
+    if (typeof HTMLDetailsElement is "undefined")
       assert.ok summary.hasAttribute("tabindex")
       assert.ok summary.hasAttribute("role")
     summary.focus()
