@@ -71,7 +71,7 @@ polyfillToggle = ->
       summary.setAttribute("aria-expanded", true)
 
 polyfillFocusAndARIA = ->
-  for summary in findElementsWithTagName(document, "SUMMARY")
+  for summary in findElementsWithTagName(document.documentElement, "SUMMARY")
     addAttributesForSummary(summary)
 
   if MutationObserver?
