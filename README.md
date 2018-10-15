@@ -27,6 +27,6 @@
 
 Licensed under the [MIT License](LICENSE)
 
-© 2017 Javan Makhmali
+© 2018 Javan Makhmali
 
 </details>
