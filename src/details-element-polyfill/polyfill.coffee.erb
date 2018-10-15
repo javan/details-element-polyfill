@@ -71,22 +71,21 @@ polyfillToggle = ->
       summary.setAttribute("aria-expanded", true)
 
 polyfillFocusAndARIA = ->
-  for summary in document.querySelectorAll("summary")
+  for summary in findElementsWithTagName(document.documentElement, "SUMMARY")
     addAttributesForSummary(summary)
 
   if MutationObserver?
     observer = new MutationObserver (mutations) ->
       for {addedNodes} in mutations
         for target in addedNodes
-          if target.tagName is "DETAILS"
-            if summary = target.querySelector("summary")
-              addAttributesForSummary(summary, target)
+          for summary in findElementsWithTagName(target, "SUMMARY")
+            addAttributesForSummary(summary)
 
     observer.observe(document.documentElement, subtree: true, childList: true)
   else
     document.addEventListener "DOMNodeInserted", (event) ->
-      if event.target.tagName is "SUMMARY"
-        addAttributesForSummary event.target
+      for summary in findElementsWithTagName(event.target, "SUMMARY")
+        addAttributesForSummary(summary)
 
 addAttributesForSummary = (summary, details) ->
   details ?= findClosestElementWithTagName(summary, "DETAILS")
@@ -137,6 +136,13 @@ onTogglingTrigger = (callback) ->
           # Prevent pagedown from space key
           event.preventDefault()
   , false
+
+findElementsWithTagName = (root, tagName) ->
+  elements = []
+  if root.nodeType is Node.ELEMENT_NODE
+    elements.push(root) if root.tagName is tagName
+    elements.push(root.getElementsByTagName(tagName)...)
+  elements
 
 findClosestElementWithTagName = do ->
   if typeof Element::closest is "function"
