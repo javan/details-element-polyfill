@@ -1,9 +1,9 @@
 export default `
+details, summary {
+  display: block;
+}
 details:not([open]) > *:not(summary) {
   display: none;
-}
-details > summary {
-  display: block;
 }
 details > summary::before {
   content: "►";
