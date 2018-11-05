@@ -2,4 +2,197 @@
 Details Element Polyfill 2.0.4
 Copyright © 2018 Javan Makhmali
  */
-(function(){}).call(this),function(){var t,e,n,r,u,o,i,a,s,l,c,d,f;c={element:function(){var t,e,n,r,u;return e=document.createElement("details"),"open"in e?(e.innerHTML="<summary>a</summary>b",e.setAttribute("style","position: absolute; left: -9999px"),r=null!=(u=document.body)?u:document.documentElement,r.appendChild(e),t=e.offsetHeight,e.open=!0,n=e.offsetHeight,r.removeChild(e),t!==n):!1}(),toggleEvent:function(){var t;return t=document.createElement("details"),"ontoggle"in t}()},c.element&&c.toggleEvent||(a=function(){return document.head.insertAdjacentHTML("afterbegin",'<style>@charset"UTF-8";details:not([open])>*:not(summary){display:none;}details>summary{display:block;}details>summary::before{content:"\u25ba";padding-right:0.3rem;font-size:0.6rem;cursor:default;}details[open]>summary::before{content:"\u25bc";}</style>')},i=function(){var t,e,n,r;return e=document.createElement("details").constructor.prototype,r=e.setAttribute,n=e.removeAttribute,t=Object.getOwnPropertyDescriptor(e,"open"),Object.defineProperties(e,{open:{get:function(){var e;return"DETAILS"===this.tagName?this.hasAttribute("open"):null!=t&&null!=(e=t.get)?e.call(this):void 0},set:function(e){var n;return"DETAILS"===this.tagName?(e?this.setAttribute("open",""):this.removeAttribute("open"),e):null!=t&&null!=(n=t.set)?n.call(this,e):void 0}},setAttribute:{value:function(t,e){return f(this,function(n){return function(){return r.call(n,t,e)}}(this))}},removeAttribute:{value:function(t){return f(this,function(e){return function(){return n.call(e,t)}}(this))}}})},s=function(){return u(function(t){var e;return e=t.querySelector("summary"),t.hasAttribute("open")?(t.removeAttribute("open"),e.setAttribute("aria-expanded",!1)):(t.setAttribute("open",""),e.setAttribute("aria-expanded",!0))})},o=function(){var e,n,u,o,i;for(o=r(document.documentElement,"SUMMARY"),e=0,n=o.length;n>e;e++)i=o[e],t(i);return"undefined"!=typeof MutationObserver&&null!==MutationObserver?(u=new MutationObserver(function(e){var n,u,o,a,s;for(a=[],u=0,o=e.length;o>u;u++)n=e[u].addedNodes,a.push(function(){var e,u,o;for(o=[],e=0,u=n.length;u>e;e++)s=n[e],o.push(function(){var e,n,u,o;for(u=r(s,"SUMMARY"),o=[],e=0,n=u.length;n>e;e++)i=u[e],o.push(t(i));return o}());return o}());return a}),u.observe(document.documentElement,{subtree:!0,childList:!0})):document.addEventListener("DOMNodeInserted",function(e){var n,u,o,a;for(o=r(e.target,"SUMMARY"),a=[],n=0,u=o.length;u>n;n++)i=o[n],a.push(t(i));return a})},t=function(t,e){return null==e&&(e=n(t,"DETAILS")),t.setAttribute("aria-expanded",e.hasAttribute("open")),t.hasAttribute("tabindex")||t.setAttribute("tabindex","0"),t.hasAttribute("role")?void 0:t.setAttribute("role","button")},l=function(){var t;return"undefined"!=typeof MutationObserver&&null!==MutationObserver?(t=new MutationObserver(function(t){var e,n,r,u,o,i;for(o=[],n=0,r=t.length;r>n;n++)u=t[n],i=u.target,e=u.attributeName,"DETAILS"===i.tagName&&"open"===e?o.push(d(i)):o.push(void 0);return o}),t.observe(document.documentElement,{attributes:!0,subtree:!0})):u(function(t){var e;return e=t.getAttribute("open"),setTimeout(function(){return t.getAttribute("open")!==e?d(t):void 0},1)})},e=function(t){return!(t.defaultPrevented||t.ctrlKey||t.metaKey||t.shiftKey||t.target.isContentEditable)},u=function(t){return addEventListener("click",function(r){var u,o;return e(r)&&r.which<=1&&(u=n(r.target,"SUMMARY"))&&"DETAILS"===(null!=(o=u.parentElement)?o.tagName:void 0)?t(u.parentElement):void 0},!1),addEventListener("keydown",function(r){var u,o,i;return e(r)&&(13===(o=r.keyCode)||32===o)&&(u=n(r.target,"SUMMARY"))&&"DETAILS"===(null!=(i=u.parentElement)?i.tagName:void 0)?(t(u.parentElement),r.preventDefault()):void 0},!1)},r=function(t,e){var n;return n=[],t.nodeType===Node.ELEMENT_NODE&&(t.tagName===e&&n.push(t),n.push.apply(n,t.getElementsByTagName(e))),n},n=function(){return"function"==typeof Element.prototype.closest?function(t,e){return t.closest(e)}:function(t,e){for(;t;){if(t.tagName===e)return t;t=t.parentNode}}}(),d=function(t){var e;return e=document.createEvent("Events"),e.initEvent("toggle",!0,!1),t.dispatchEvent(e)},f=function(t,e){var n,r;return n=t.getAttribute("open"),r=e(),t.getAttribute("open")!==n&&d(t),r},c.element||(a(),i(),s(),o()),c.element&&!c.toggleEvent&&l())}.call(this),function(){}.call(this);
+(function() {
+  "use strict";
+  var element = document.createElement("details");
+  element.innerHTML = "<summary>a</summary>b";
+  element.setAttribute("style", "position: absolute; left: -9999px");
+  var support = {
+    open: "open" in element && elementExpands(),
+    toggle: "ontoggle" in element
+  };
+  function elementExpands() {
+    (document.body || document.documentElement).appendChild(element);
+    var closedHeight = element.offsetHeight;
+    element.open = true;
+    var openedHeight = element.offsetHeight;
+    element.parentNode.removeChild(element);
+    return closedHeight != openedHeight;
+  }
+  var styles = '\ndetails:not([open]) > *:not(summary) {\n  display: none;\n}\ndetails > summary {\n  display: block;\n}\ndetails > summary::before {\n  content: "►";\n  padding-right: 0.3rem;\n  font-size: 0.6rem;\n  cursor: default;\n}\ndetails[open] > summary::before {\n  content: "▼";\n}\n';
+  var _ref = [], forEach = _ref.forEach, slice = _ref.slice;
+  if (!support.open) {
+    polyfillStyles();
+    polyfillProperties();
+    polyfillToggle();
+    polyfillAccessibility();
+  }
+  if (support.open && !support.toggle) {
+    polyfillToggleEvent();
+  }
+  function polyfillStyles() {
+    document.head.insertAdjacentHTML("afterbegin", "<style>" + styles + "</style>");
+  }
+  function polyfillProperties() {
+    var prototype = document.createElement("details").constructor.prototype;
+    var setAttribute = prototype.setAttribute, removeAttribute = prototype.removeAttribute;
+    var open = Object.getOwnPropertyDescriptor(prototype, "open");
+    Object.defineProperties(prototype, {
+      open: {
+        get: function get() {
+          if (this.tagName == "DETAILS") {
+            return this.hasAttribute("open");
+          } else {
+            if (open && open.get) {
+              return open.get.call(this);
+            }
+          }
+        },
+        set: function set(value) {
+          if (this.tagName == "DETAILS") {
+            return value ? this.setAttribute("open", "") : this.removeAttribute("open");
+          } else {
+            if (open && open.set) {
+              return open.set.call(this, value);
+            }
+          }
+        }
+      },
+      setAttribute: {
+        value: function value(name, _value) {
+          var _this = this;
+          var call = function call() {
+            setAttribute.call(_this, name, _value);
+          };
+          return this.tagName == "DETAILS" ? triggerToggleIfToggled(this, call) : call();
+        }
+      },
+      removeAttribute: {
+        value: function value(name) {
+          var _this2 = this;
+          var call = function call() {
+            removeAttribute.call(_this2, name);
+          };
+          return this.tagName == "DETAILS" ? triggerToggleIfToggled(this, call) : call();
+        }
+      }
+    });
+  }
+  function polyfillToggle() {
+    onTogglingTrigger(function(element) {
+      var summary = element.querySelector("summary");
+      if (element.hasAttribute("open")) {
+        element.removeAttribute("open");
+        element.setAttribute("aria-expanded", false);
+      } else {
+        element.setAttribute("open", "");
+        element.setAttribute("aria-expanded", true);
+      }
+    });
+  }
+  function polyfillToggleEvent() {
+    if (window.MutationObserver) {
+      new MutationObserver(function(mutations) {
+        forEach.call(mutations, function(mutation) {
+          var target = mutation.target, attributeName = mutation.attributeName;
+          if (target.tagName == "DETAILS" && attributeName == "open") {
+            triggerToggle(toggle);
+          }
+        });
+      }).observe(document.documentElement, {
+        attributes: true,
+        subtree: true
+      });
+    } else {
+      onTogglingTrigger(function(element) {
+        var wasOpen = element.getAttribute("open");
+        setTimeout(function() {
+          var isOpen = element.getAttribute("open");
+          if (wasOpen != isOpen) {
+            triggerToggle(element);
+          }
+        }, 1);
+      });
+    }
+  }
+  function polyfillAccessibility() {
+    if (window.MutationObserver) {
+      new MutationObserver(function(mutations) {
+        forEach.call(mutations, function(mutation) {
+          forEach.call(mutation.addedNodes, setAccessibilityAttributes);
+        });
+      }).observe(document.documentElement, {
+        subtree: true,
+        childList: true
+      });
+    } else {
+      document.addEventListener("DOMNodeInserted", function(event) {
+        setAccessibilityAttributes(event.target);
+      });
+    }
+  }
+  function setAccessibilityAttributes(root) {
+    findElementsWithTagName(root, "SUMMARY").forEach(function(summary) {
+      var details = findClosestElementWithTagName(summary, "DETAILS");
+      summary.setAttribute("aria-expanded", details.hasAttribute("open"));
+      if (!summary.hasAttribute("tabindex")) summary.setAttribute("tabindex", "0");
+      if (!summary.hasAttribute("role")) summary.setAttribute("role", "button");
+    });
+  }
+  function eventIsSignificant(event) {
+    return !(event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.target.isContentEditable);
+  }
+  function onTogglingTrigger(callback) {
+    addEventListener("click", function(event) {
+      if (eventIsSignificant(event)) {
+        if (event.which <= 1) {
+          var element = findClosestElementWithTagName(event.target, "SUMMARY");
+          if (element && element.parentNode && element.parentNode.tagName == "DETAILS") {
+            callback(element.parentNode);
+          }
+        }
+      }
+    }, false);
+    addEventListener("keydown", function(event) {
+      if (eventIsSignificant(event)) {
+        if (event.keyCode == 13 || event.keyCode == 32) {
+          var element = findClosestElementWithTagName(event.target, "SUMMARY");
+          if (element && element.parentNode && element.parentNode.tagName == "DETAILS") {
+            callback(element.parentNode);
+            event.preventDefault();
+          }
+        }
+      }
+    }, false);
+  }
+  function triggerToggle(element) {
+    var event = document.createEvent("Event");
+    event.initEvent("toggle", true, false);
+    element.dispatchEvent(event);
+  }
+  function triggerToggleIfToggled(element, callback) {
+    var wasOpen = element.getAttribute("open");
+    var result = callback();
+    var isOpen = element.getAttribute("open");
+    if (wasOpen != isOpen) {
+      triggerToggle(element);
+    }
+    return result;
+  }
+  function findElementsWithTagName(root, tagName) {
+    return (root.tagName == tagName ? [ root ] : []).concat(typeof root.getElementsByTagName == "function" ? slice.call(root.getElementsByTagName(tagName)) : []);
+  }
+  function findClosestElementWithTagName(element, tagName) {
+    if (typeof element.closest == "function") {
+      return element.closest(tagName);
+    } else {
+      while (element) {
+        if (element.tagName == tagName) {
+          return element;
+        } else {
+          element = element.parentNode;
+        }
+      }
+    }
+  }
+})();

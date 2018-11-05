@@ -7,7 +7,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "bin/blade runner"
+    "test": "rollup --config rollup.config.test.js && karma start",
+    "build": "rollup --config rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,18 @@
   "bugs": {
     "url": "https://github.com/javan/details-element-polyfill/issues"
   },
-  "homepage": "https://github.com/javan/details-element-polyfill#readme"
+  "homepage": "https://github.com/javan/details-element-polyfill#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "karma": "^3.1.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-qunit": "^2.1.0",
+    "karma-sauce-launcher": "^1.2.0",
+    "qunit": "^2.8.0",
+    "rollup": "^0.67.0",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-uglify": "^6.0.0"
+  }
 }
