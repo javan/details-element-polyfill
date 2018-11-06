@@ -1,5 +1,5 @@
 /*
-Details Element Polyfill 2.1.0
+Details Element Polyfill 2.1.1
 Copyright © 2018 Javan Makhmali
  */
 (function() {
@@ -116,6 +116,7 @@ Copyright © 2018 Javan Makhmali
     }
   }
   function polyfillAccessibility() {
+    setAccessibilityAttributes(document);
     if (window.MutationObserver) {
       new MutationObserver(function(mutations) {
         forEach.call(mutations, function(mutation) {
