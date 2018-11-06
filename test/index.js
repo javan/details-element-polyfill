@@ -1,16 +1,11 @@
+import "./setup"
+import { DYNAMIC_HTML } from "./fixtures"
 import "../src/index"
 const { module, test } = QUnit
 
 module("<details>", {
   beforeEach() {
-    document.body.insertAdjacentHTML("beforeend", `
-      <div id="container">
-        <details id="details">
-          <summary id="summary">Summary</summary>
-          <div id="content">Content</div>
-        </details>
-      </div>
-    `)
+    document.body.insertAdjacentHTML("beforeend", DYNAMIC_HTML)
   },
   afterEach() {
     document.body.removeChild(document.getElementById("container"))
@@ -26,7 +21,21 @@ test("displays summary and hides content initially", (assert) => {
   })
 })
 
-test("summary is focusable", (assert) => {
+test(`<summary id="static-summary"> is focusable`, (assert) => {
+  const done = assert.async()
+  const summary = getElement("static-summary")
+  defer(() => {
+    if (typeof HTMLDetailsElement === "undefined") {
+      assert.ok(summary.hasAttribute("tabindex"))
+      assert.ok(summary.hasAttribute("role"))
+    }
+    summary.focus()
+    assert.equal(document.activeElement, summary)
+    done()
+  })
+})
+
+test(`<summary id="summary"> is focusable`, (assert) => {
   const done = assert.async()
   const summary = getElement("summary")
   defer(() => {
