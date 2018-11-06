@@ -105,6 +105,7 @@ function polyfillToggleEvent() {
 }
 
 function polyfillAccessibility() {
+  setAccessibilityAttributes(document)
   if (window.MutationObserver) {
     new MutationObserver(mutations => {
       forEach.call(mutations, mutation => {
