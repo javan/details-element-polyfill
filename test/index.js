@@ -3,6 +3,8 @@ import { DYNAMIC_HTML } from "./fixtures"
 import "../src/index"
 const { module, test } = QUnit
 
+const detailsElementIsNative = typeof HTMLDetailsElement != "undefined"
+
 module("<details>", {
   beforeEach() {
     document.body.insertAdjacentHTML("beforeend", DYNAMIC_HTML)
@@ -25,7 +27,7 @@ test(`<summary id="static-summary"> is focusable`, (assert) => {
   const done = assert.async()
   const summary = getElement("static-summary")
   defer(() => {
-    if (typeof HTMLDetailsElement === "undefined") {
+    if (!detailsElementIsNative) {
       assert.ok(summary.hasAttribute("tabindex"))
       assert.ok(summary.hasAttribute("role"))
     }
@@ -39,7 +41,7 @@ test(`<summary id="summary"> is focusable`, (assert) => {
   const done = assert.async()
   const summary = getElement("summary")
   defer(() => {
-    if (typeof HTMLDetailsElement === "undefined") {
+    if (!detailsElementIsNative) {
       assert.ok(summary.hasAttribute("tabindex"))
       assert.ok(summary.hasAttribute("role"))
     }
@@ -53,6 +55,7 @@ test("open property toggles content", (assert) => {
   const done = assert.async()
 
   const element = getElement("details")
+  const summary = getElement("summary")
   const content = getElement("content")
 
   let toggleEventCount = 0
@@ -61,16 +64,22 @@ test("open property toggles content", (assert) => {
   defer(() => {
     element.open = true
     defer(() => {
+      assert.equal(toggleEventCount, 1)
       assert.notEqual(content.offsetHeight, 0)
       assert.ok(element.hasAttribute("open"))
       assert.ok(element.open)
-      assert.equal(toggleEventCount, 1)
+      if (!detailsElementIsNative) {
+        assert.equal(summary.getAttribute("aria-expanded"), "true")
+      }
 
       element.open = false
       defer(() => {
         assert.equal(content.offsetHeight, 0)
         assert.notOk(element.hasAttribute("open"))
         assert.notOk(element.open)
+        if (!detailsElementIsNative) {
+          assert.equal(summary.getAttribute("aria-expanded"), "false")
+        }
         defer(() => {
           assert.equal(toggleEventCount, 2)
           done()
@@ -84,6 +93,7 @@ test("open attribute toggles content", (assert) => {
   const done = assert.async()
 
   const element = getElement("details")
+  const summary = getElement("summary")
   const content = getElement("content")
 
   let toggleEventCount = 0
@@ -92,13 +102,19 @@ test("open attribute toggles content", (assert) => {
   defer(() => {
     element.setAttribute("open", "")
     defer(() => {
-      assert.notEqual(content.offsetHeight, 0)
       assert.equal(toggleEventCount, 1)
+      assert.notEqual(content.offsetHeight, 0)
+      if (!detailsElementIsNative) {
+        assert.equal(summary.getAttribute("aria-expanded"), "true")
+      }
 
       element.removeAttribute("open")
       defer(() => {
-        assert.equal(content.offsetHeight, 0)
         assert.equal(toggleEventCount, 2)
+        assert.equal(content.offsetHeight, 0)
+        if (!detailsElementIsNative) {
+          assert.equal(summary.getAttribute("aria-expanded"), "false")
+        }
         done()
       })
     })
@@ -117,14 +133,20 @@ test("click <summary> toggles content", (assert) => {
 
   defer(() =>
     clickElement(summary, function() {
+      assert.equal(toggleEventCount, 1)
       assert.notEqual(content.offsetHeight, 0)
       assert.ok(element.hasAttribute("open"))
-      assert.equal(toggleEventCount, 1)
+      if (!detailsElementIsNative) {
+        assert.equal(summary.getAttribute("aria-expanded"), "true")
+      }
 
       clickElement(summary, function() {
+        assert.equal(toggleEventCount, 2)
         assert.equal(content.offsetHeight, 0)
         assert.notOk(element.hasAttribute("open"))
-        assert.ok(toggleEventCount, 2)
+        if (!detailsElementIsNative) {
+          assert.equal(summary.getAttribute("aria-expanded"), "false")
+        }
         done()
       })
     })
@@ -146,14 +168,20 @@ test("click <summary> child toggles content", (assert) => {
 
   defer(() =>
     clickElement(summaryChild, function() {
+      assert.equal(toggleEventCount, 1)
       assert.notEqual(content.offsetHeight, 0)
       assert.ok(element.hasAttribute("open"))
-      assert.equal(toggleEventCount, 1)
+      if (!detailsElementIsNative) {
+        assert.equal(summary.getAttribute("aria-expanded"), "true")
+      }
 
       clickElement(summaryChild, function() {
+        assert.equal(toggleEventCount, 2)
         assert.equal(content.offsetHeight, 0)
         assert.notOk(element.hasAttribute("open"))
-        assert.ok(toggleEventCount, 2)
+        if (!detailsElementIsNative) {
+          assert.equal(summary.getAttribute("aria-expanded"), "false")
+        }
         done()
       })
     })

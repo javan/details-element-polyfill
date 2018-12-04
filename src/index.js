@@ -48,18 +48,34 @@ function polyfillProperties() {
     },
     setAttribute: {
       value(name, value) {
-        const call = () => { setAttribute.call(this, name, value) }
-        return this.tagName == "DETAILS"
-          ? triggerToggleIfToggled(this, call)
-          : call()
+        const call = () => setAttribute.call(this, name, value)
+        if (name == "open" && this.tagName == "DETAILS") {
+          const wasOpen = this.hasAttribute("open")
+          const result = call()
+          if (!wasOpen) {
+            const summary = this.querySelector("summary")
+            if (summary) summary.setAttribute("aria-expanded", true)
+            triggerToggle(this)
+          }
+          return result
+        }
+        return call()
       }
     },
     removeAttribute: {
       value(name) {
-        const call = () => { removeAttribute.call(this, name) }
-        return this.tagName == "DETAILS"
-          ? triggerToggleIfToggled(this, call)
-          : call()
+        const call = () => removeAttribute.call(this, name)
+        if (name == "open" && this.tagName == "DETAILS") {
+          const wasOpen = this.hasAttribute("open")
+          const result = call()
+          if (wasOpen) {
+            const summary = this.querySelector("summary")
+            if (summary) summary.setAttribute("aria-expanded", false)
+            triggerToggle(this)
+          }
+          return result
+        }
+        return call()
       }
     }
   })
@@ -67,14 +83,9 @@ function polyfillProperties() {
 
 function polyfillToggle() {
   onTogglingTrigger(element => {
-    const summary = element.querySelector("summary")
-    if (element.hasAttribute("open")) {
-      element.removeAttribute("open")
-      summary.setAttribute("aria-expanded", false)
-    } else {
-      element.setAttribute("open", "")
-      summary.setAttribute("aria-expanded", true)
-    }
+    element.hasAttribute("open")
+      ? element.removeAttribute("open")
+      : element.setAttribute("open", "")
   })
 }
 
@@ -172,16 +183,6 @@ function triggerToggle(element) {
   const event = document.createEvent("Event")
   event.initEvent("toggle", true, false)
   element.dispatchEvent(event)
-}
-
-function triggerToggleIfToggled(element, callback) {
-  const wasOpen = element.getAttribute("open")
-  const result = callback()
-  const isOpen = element.getAttribute("open")
-  if (wasOpen != isOpen) {
-    triggerToggle(element)
-  }
-  return result
 }
 
 function findElementsWithTagName(root, tagName) {
