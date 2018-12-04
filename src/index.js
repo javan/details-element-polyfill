@@ -67,7 +67,6 @@ function polyfillProperties() {
 
 function polyfillToggle() {
   onTogglingTrigger(element => {
-    const summary = element.querySelector("summary")
     if (element.hasAttribute("open")) {
       element.removeAttribute("open")
       element.setAttribute("aria-expanded", false)
