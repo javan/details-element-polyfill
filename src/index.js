@@ -70,10 +70,10 @@ function polyfillToggle() {
     const summary = element.querySelector("summary")
     if (element.hasAttribute("open")) {
       element.removeAttribute("open")
-      element.setAttribute("aria-expanded", false)
+      summary.setAttribute("aria-expanded", false)
     } else {
       element.setAttribute("open", "")
-      element.setAttribute("aria-expanded", true)
+      summary.setAttribute("aria-expanded", true)
     }
   })
 }
