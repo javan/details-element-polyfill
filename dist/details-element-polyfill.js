@@ -1,5 +1,5 @@
 /*
-Details Element Polyfill 2.1.1
+Details Element Polyfill 2.2.0
 Copyright © 2018 Javan Makhmali
  */
 (function() {
@@ -62,32 +62,45 @@ Copyright © 2018 Javan Makhmali
         value: function value(name, _value) {
           var _this = this;
           var call = function call() {
-            setAttribute.call(_this, name, _value);
+            return setAttribute.call(_this, name, _value);
           };
-          return this.tagName == "DETAILS" ? triggerToggleIfToggled(this, call) : call();
+          if (name == "open" && this.tagName == "DETAILS") {
+            var wasOpen = this.hasAttribute("open");
+            var result = call();
+            if (!wasOpen) {
+              var summary = this.querySelector("summary");
+              if (summary) summary.setAttribute("aria-expanded", true);
+              triggerToggle(this);
+            }
+            return result;
+          }
+          return call();
         }
       },
       removeAttribute: {
         value: function value(name) {
           var _this2 = this;
           var call = function call() {
-            removeAttribute.call(_this2, name);
+            return removeAttribute.call(_this2, name);
           };
-          return this.tagName == "DETAILS" ? triggerToggleIfToggled(this, call) : call();
+          if (name == "open" && this.tagName == "DETAILS") {
+            var wasOpen = this.hasAttribute("open");
+            var result = call();
+            if (wasOpen) {
+              var summary = this.querySelector("summary");
+              if (summary) summary.setAttribute("aria-expanded", false);
+              triggerToggle(this);
+            }
+            return result;
+          }
+          return call();
         }
       }
     });
   }
   function polyfillToggle() {
     onTogglingTrigger(function(element) {
-      var summary = element.querySelector("summary");
-      if (element.hasAttribute("open")) {
-        element.removeAttribute("open");
-        element.setAttribute("aria-expanded", false);
-      } else {
-        element.setAttribute("open", "");
-        element.setAttribute("aria-expanded", true);
-      }
+      element.hasAttribute("open") ? element.removeAttribute("open") : element.setAttribute("open", "");
     });
   }
   function polyfillToggleEvent() {
@@ -170,15 +183,6 @@ Copyright © 2018 Javan Makhmali
     var event = document.createEvent("Event");
     event.initEvent("toggle", true, false);
     element.dispatchEvent(event);
-  }
-  function triggerToggleIfToggled(element, callback) {
-    var wasOpen = element.getAttribute("open");
-    var result = callback();
-    var isOpen = element.getAttribute("open");
-    if (wasOpen != isOpen) {
-      triggerToggle(element);
-    }
-    return result;
   }
   function findElementsWithTagName(root, tagName) {
     return (root.tagName == tagName ? [ root ] : []).concat(typeof root.getElementsByTagName == "function" ? slice.call(root.getElementsByTagName(tagName)) : []);
