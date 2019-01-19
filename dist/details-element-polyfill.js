@@ -1,6 +1,6 @@
 /*
 Details Element Polyfill 2.2.0
-Copyright © 2018 Javan Makhmali
+Copyright © 2019 Javan Makhmali
  */
 (function() {
   "use strict";
@@ -19,7 +19,7 @@ Copyright © 2018 Javan Makhmali
     element.parentNode.removeChild(element);
     return closedHeight != openedHeight;
   }
-  var styles = '\ndetails, summary {\n  display: block;\n}\ndetails:not([open]) > *:not(summary) {\n  display: none;\n}\ndetails > summary::before {\n  content: "►";\n  padding-right: 0.3rem;\n  font-size: 0.6rem;\n  cursor: default;\n}\ndetails[open] > summary::before {\n  content: "▼";\n}\n';
+  var styles = '\ndetails, summary {\n  display: block;\n}\ndetails:not([open]) > *:not(summary) {\n  display: none;\n}\nsummary::before {\n  content: "►";\n  padding-right: 0.3rem;\n  font-size: 0.6rem;\n  cursor: default;\n}\n[open] > summary::before {\n  content: "▼";\n}\n';
   var _ref = [], forEach = _ref.forEach, slice = _ref.slice;
   if (!support.open) {
     polyfillStyles();
