@@ -21,14 +21,15 @@ const config = {
 
 if (process.env.CI) {
   config.customLaunchers = {
-    sl_chrome_latest: sauce("chrome", 70),
+    sl_chrome_latest: sauce("chrome", 71),
     sl_chrome_42: sauce("chrome", 42),
-    sl_ff_latest: sauce("firefox", 63),
+    sl_ff_latest: sauce("firefox", 64),
     sl_ff_43: sauce("firefox", 43),
     sl_safari_latest: sauce("safari", 12.0, "macOS 10.13"),
     sl_safari_11: sauce("safari", 11.0, "macOS 10.12"),
     sl_safari_10: sauce("safari", 10.1, "macOS 10.12"),
-    sl_edge_latest: sauce("microsoftedge", 17.17134, "Windows 10"),
+    sl_edge_latest: sauce("microsoftedge", 18.17763, "Windows 10"),
+    sl_edge_17: sauce("microsoftedge", 17.17134, "Windows 10"),
     sl_edge_16: sauce("microsoftedge", 16.16299, "Windows 10"),
     sl_edge_15: sauce("microsoftedge", 15.15063, "Windows 10"),
     sl_ie_11: sauce("internet explorer", 11, "Windows 8.1"),
