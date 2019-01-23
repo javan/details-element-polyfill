@@ -188,6 +188,32 @@ test("click <summary> child toggles content", (assert) => {
   )
 })
 
+test("toggle event does not bubble", (assert) => {
+  const done = assert.async()
+
+  const container = getElement("container")
+  const element = getElement("details")
+
+  let toggleEventCount = 0
+  element.addEventListener("toggle", () => toggleEventCount++)
+
+  let bubbledToggleEventCount = 0
+  container.addEventListener("toggle", () => bubbledToggleEventCount++)
+
+  element.open = true
+  defer(() => {
+    assert.equal(toggleEventCount, 1)
+    assert.equal(bubbledToggleEventCount, 0)
+
+    element.open = false
+    defer(() => {
+      assert.equal(toggleEventCount, 2)
+      assert.equal(bubbledToggleEventCount, 0)
+      done()
+    })
+  })
+})
+
 function getElement(id) {
   return document.getElementById(id)
 }

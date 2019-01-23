@@ -181,7 +181,7 @@ function onTogglingTrigger(callback) {
 
 function triggerToggle(element) {
   const event = document.createEvent("Event")
-  event.initEvent("toggle", true, false)
+  event.initEvent("toggle", false, false)
   element.dispatchEvent(event)
 }
 
