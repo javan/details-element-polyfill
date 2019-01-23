@@ -1,5 +1,5 @@
 /*
-Details Element Polyfill 2.2.0
+Details Element Polyfill 2.3.0
 Copyright © 2019 Javan Makhmali
  */
 (function() {
@@ -181,7 +181,7 @@ Copyright © 2019 Javan Makhmali
   }
   function triggerToggle(element) {
     var event = document.createEvent("Event");
-    event.initEvent("toggle", true, false);
+    event.initEvent("toggle", false, false);
     element.dispatchEvent(event);
   }
   function findElementsWithTagName(root, tagName) {

@@ -1,6 +1,6 @@
 {
   "name": "details-element-polyfill",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "HTML <details> element polyfill",
   "main": "dist/details-element-polyfill.js",
   "files": [
