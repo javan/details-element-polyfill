@@ -11,9 +11,10 @@
 
 </details>
 
-<details open><summary><strong>Download</strong></summary>
+<details open><summary><strong>Install</strong></summary>
 
-* **[details-element-polyfill.js](https://raw.githubusercontent.com/javan/details-element-polyfill/master/dist/details-element-polyfill.js)**
+* Download  **_↝_ [details-element-polyfill.js](https://raw.githubusercontent.com/javan/details-element-polyfill/master/dist/details-element-polyfill.js)**
+* npm **_↝_ [details-element-polyfill](https://www.npmjs.com/package/details-element-polyfill)**
 
 </details>
 
@@ -27,6 +28,6 @@
 
 Licensed under the [MIT License](LICENSE)
 
-© 2018 Javan Makhmali
+© 2019 Javan Makhmali
 
 </details>
