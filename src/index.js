@@ -95,7 +95,7 @@ function polyfillToggleEvent() {
       forEach.call(mutations, mutation => {
         const { target, attributeName } = mutation
         if (target.tagName == "DETAILS" && attributeName == "open") {
-          triggerToggle(toggle)
+          triggerToggle(target)
         }
       })
     }).observe(document.documentElement, {
