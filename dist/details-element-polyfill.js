@@ -1,5 +1,5 @@
 /*
-Details Element Polyfill 2.3.0
+Details Element Polyfill 2.3.1
 Copyright © 2019 Javan Makhmali
  */
 (function() {
@@ -109,7 +109,7 @@ Copyright © 2019 Javan Makhmali
         forEach.call(mutations, function(mutation) {
           var target = mutation.target, attributeName = mutation.attributeName;
           if (target.tagName == "DETAILS" && attributeName == "open") {
-            triggerToggle(toggle);
+            triggerToggle(target);
           }
         });
       }).observe(document.documentElement, {
