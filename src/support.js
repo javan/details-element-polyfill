@@ -1,4 +1,4 @@
-const element = document.createElement("details")
+const element = window.top.document.createElement("details")
 element.innerHTML = "<summary>a</summary>b"
 element.setAttribute("style", "position: absolute; left: -9999px")
 
@@ -8,7 +8,7 @@ export default {
 }
 
 function elementExpands() {
-  (document.body || document.documentElement).appendChild(element)
+  (window.top.document.body || window.top.document.documentElement).appendChild(element)
 
   const closedHeight = element.offsetHeight
   element.open = true
