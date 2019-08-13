@@ -1,19 +1,7 @@
 const element = document.createElement("details")
-element.innerHTML = "<summary>a</summary>b"
-element.setAttribute("style", "position: absolute; left: -9999px")
+const elementIsNative = typeof HTMLDetailsElement != "undefined" && element instanceof HTMLDetailsElement
 
 export default {
-  open: "open" in element && elementExpands(),
+  open: "open" in element || elementIsNative,
   toggle: "ontoggle" in element
-}
-
-function elementExpands() {
-  (document.body || document.documentElement).appendChild(element)
-
-  const closedHeight = element.offsetHeight
-  element.open = true
-  const openedHeight = element.offsetHeight
-
-  element.parentNode.removeChild(element)
-  return closedHeight != openedHeight
 }
