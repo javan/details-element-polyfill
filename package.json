@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/javan/details-element-polyfill#readme",
   "devDependencies": {
-    "@babel/cli": "7.6.4",
-    "@babel/core": "7.6.4",
-    "@babel/preset-env": "7.6.3",
+    "@babel/cli": "7.7.0",
+    "@babel/core": "7.7.0",
+    "@babel/preset-env": "7.7.0",
     "karma": "4.4.1",
     "karma-chrome-launcher": "3.1.0",
     "karma-qunit": "4.0.0",
