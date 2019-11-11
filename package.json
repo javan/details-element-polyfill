@@ -34,7 +34,7 @@
     "karma-qunit": "4.0.0",
     "karma-sauce-launcher": "2.0.2",
     "qunit": "2.9.3",
-    "rollup": "1.26.4",
+    "rollup": "1.26.5",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-uglify": "6.0.3"
   }
