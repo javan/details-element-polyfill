@@ -36,6 +36,6 @@
     "qunit": "2.9.3",
     "rollup": "1.27.8",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-uglify": "6.0.3"
+    "rollup-plugin-uglify": "6.0.4"
   }
 }
