@@ -1,5 +1,5 @@
-import babel from "rollup-plugin-babel"
-import { uglify } from "rollup-plugin-uglify"
+import babel from "@rollup/plugin-babel"
+import { terser } from "rollup-plugin-terser"
 import { version, author, main } from "./package.json"
 
 const year = new Date().getFullYear()
@@ -18,10 +18,10 @@ export default {
     babel({
       exclude: "node_modules/**"
     }),
-    uglify({
+    terser({
       mangle: false,
       compress: false,
-      output: {
+      format: {
         beautify: true,
         indent_level: 2,
         comments: /Copyright/
