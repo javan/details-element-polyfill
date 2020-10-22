@@ -1,9 +1,14 @@
 import babel from "@rollup/plugin-babel"
 import { terser } from "rollup-plugin-terser"
-import { version, author, main } from "./package.json"
+import { version, author, license, main } from "./package.json"
 
-const year = new Date().getFullYear()
-const banner = `/*\nDetails Element Polyfill ${version}\nCopyright © ${year} ${author}\n */`
+const banner = [
+  `/*!`,
+  ` * Details Element Polyfill ${version}`,
+  ` * Copyright © ${new Date().getFullYear()} ${author}`,
+  ` * Released under the ${license} license`,
+  ` */`
+].join("\n")
 
 export default {
   input: "src/index.js",
