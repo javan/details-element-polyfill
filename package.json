@@ -30,7 +30,7 @@
     "@babel/core": "7.11.6",
     "@babel/preset-env": "7.11.5",
     "@rollup/plugin-babel": "5.2.1",
-    "karma": "5.2.3",
+    "karma": "6.3.16",
     "karma-chrome-launcher": "3.1.0",
     "karma-qunit": "4.1.1",
     "karma-sauce-launcher": "4.1.4",
